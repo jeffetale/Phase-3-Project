@@ -28,6 +28,16 @@ class Finntasker_CLI:
         else:
             print(f'User {username} not found.')
 
+    def manage_investment(self, username, description, amount):
+        user = session.query(User).filter_by(username=username).first()
+        if user:
+            investment = Investment(description=description, amount=amount, user=user)
+            self.session.add(investment)
+            self.session.commit()
+            print(f'Investment managed successfully for {username}.')
+        else:
+            print(f'User {username} not found')
+
 
 if __name__ == '__main__':
     fire.Fire(Finntasker_CLI)
