@@ -38,6 +38,14 @@ class Finntasker_CLI:
         else:
             print(f'User {username} not found')
 
+    def search_users(self, username):
+        user = session.query(User).filter_by(username=username).first()
+        if user:
+            print(f'User Found')
+            print(f'Username: {user.username}')
+        else:
+            print(f'User {username} not found.')
+
 
 if __name__ == '__main__':
     fire.Fire(Finntasker_CLI)
