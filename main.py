@@ -1,4 +1,5 @@
 import fire
+from datetime import datetime
 from model.models import User, Bill, Investment
 from configuration.config import session, create_db
 
@@ -8,6 +9,25 @@ class Finntasker_CLI:
 
     def init_db(self):
         create_db()
+
+    # In your CLI script (cli.py)
+    def add_user(self, username, password):
+        user = User(username= username, password= password)
+        self.session.add(user)
+        self.session.commit()
+        print(f'User {username} added successfully.')
+
+    def create_bill(self, username, description, amount, due_date):
+        user = session.query(User).filter_by(username=username).first()
+        if user:
+            due_date = datetime.strptime(due_date, '%Y-%m-%d')
+            bill = Bill(description= description, amount= amount, due_date= due_date, user= user)
+            self.session.add(bill)
+            self.session.commit()
+            print(f'Bill of {amount} created successfully for {username}.')
+        else:
+            print(f'User {username} not found.')
+
 
 if __name__ == '__main__':
     fire.Fire(Finntasker_CLI)
