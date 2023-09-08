@@ -132,5 +132,18 @@ class Finntasker_CLI:
         else:
             print(f"No username by {username} found.")
 
+    def delete_investment(self, username, description):
+        user = session.query(User).filter_by(username = username).first()
+        if user:
+            investment = session.query(Investment).filter_by(user = user, description = description).first()
+            if investment:
+                self.session.delete(investment)
+                self.session.commit()
+                print(f"{description} investment for {username} has been deleted.")
+            else:
+                print(f"No {description} investment for {username} found.")
+        else:
+            print(f"No username by {username} found.")
+            
 if __name__ == '__main__':
     fire.Fire(Finntasker_CLI)
