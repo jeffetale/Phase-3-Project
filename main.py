@@ -25,7 +25,7 @@ class Finntasker_CLI:
             self.session.commit()
             print(f'Bill of {amount} created successfully for {username}.')
         else:
-            print(f'User {username} not found.')
+            print(f'No username by {username} found.')
 
     def add_investment(self, username, description, amount):
         user = session.query(User).filter_by(username=username).first()
@@ -35,7 +35,7 @@ class Finntasker_CLI:
             self.session.commit()
             print(f'{description} investment added successfully for {username}.')
         else:
-            print(f'User {username} not found')
+            print(f'No username by {username} found.')
 
     def search_users(self, username):
         user = session.query(User).filter_by(username=username).first()
@@ -43,7 +43,7 @@ class Finntasker_CLI:
             print(f'User Found')
             print(f'Username: {user.username}')
         else:
-            print(f'User {username} not found.')
+            print(f'No username by {username} found.')
 
     def search_bills(elf, username):
         user = session.query(User).filter_by(username = username).first()
@@ -56,7 +56,7 @@ class Finntasker_CLI:
             else:
                 print(f'No bills found for {username}.')
         else:
-            print(f'User {username} not found.')
+            print(f'No username by {username} found.')
 
     def search_investments(self, username):
         user = session.query(User).filter_by(username=username).first()
@@ -69,7 +69,7 @@ class Finntasker_CLI:
             else:
                 print(f'No investments found for {username}.')
         else:
-            print("User {username} not found.")
+            print("No username by {username} found.")
 
     def change_password(self, username, new_password):
         user = session.query(User).filter_by(username=username).first()
@@ -78,7 +78,7 @@ class Finntasker_CLI:
             self.session.commit()
             print(f'Password for {username} updated successfully.')
         else:
-            print('User {username} not found.')
+            print('No username by {username} found.')
 
     def update_bill(self, username, description, new_amount, new_due_date):
         user = session.query(User).filter_by(username=username).first()
@@ -93,7 +93,7 @@ class Finntasker_CLI:
             else:
                 print(f"{description} bill for {username} not found.")
         else:
-            print(f"{username} not found.")
+            print(f"No username by {username} found.")
 
     def update_investment(self, username, description, new_amount):
         user = session.query(User).filter_by(username=username).first()
@@ -106,7 +106,7 @@ class Finntasker_CLI:
             else:
                 print(f"No {description} investment for {username} found.")
         else:
-            print(f"{username} not found.")
+            print(f"No username by {username} found.")
 
     def delete_user(self, username):
         user = session.query(User).filter_by(username=username).first()
@@ -117,7 +117,20 @@ class Finntasker_CLI:
             self.session.commit()
             print(f"{username} and all their records successfully deleted.")
         else:
-            print(f"{username} no found.")
+            print(f"No username by {username} found.")
+
+    def delete_bill(self, username, description):
+        user = session.query(User).filter_by(username = username).first()
+        if user:
+            bill = session.query(Bill).filter_by(user = user, description = description).first()
+            if bill:
+                self.session.delete(bill)
+                self.session.commit()
+                print(f"{description} bill for {username} has been deleted.")
+            else:
+                print(f"No {description} bill for {username} found.")
+        else:
+            print(f"No username by {username} found.")
 
 if __name__ == '__main__':
     fire.Fire(Finntasker_CLI)
