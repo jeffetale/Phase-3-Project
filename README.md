@@ -35,6 +35,7 @@ pipenv shell
 pipenv run python main.py add_user --username johndoe --password secret
 ```
 This will create a new user with the username johndoe and password secret.
+
 2. Adding Bills
 ```bash
 pipenv run python main.py add_bill --username johndoe --description Rent --amount 1000 --due_date 2023-09-30
