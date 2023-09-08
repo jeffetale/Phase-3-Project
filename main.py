@@ -46,6 +46,19 @@ class Finntasker_CLI:
         else:
             print(f'User {username} not found.')
 
+    def search_bills(self, username):
+        user = session.query(User).filter_by(username = username).first()
+        if user:
+            bills = user.bills
+            if bills:
+                print(f'Bills for {username}')
+                for bill in bills:
+                    print(f'Description: {bill.description}, Amount: {bill.amount}, Due Date: {bill.due_date}')
+            else:
+                print(f'No bills found for {username}.')
+        else:
+            print(f'User {username} not found.')
+
 
 if __name__ == '__main__':
     fire.Fire(Finntasker_CLI)
