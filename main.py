@@ -49,7 +49,7 @@ class Finntasker_CLI:
         else:
             print(f'No username by {username} found.')
 
-    def search_bill(self, username):
+    def search_bills(self, username):
         username = username.lower()
         user = session.query(User).filter_by(username = username).first()
         if user:
@@ -63,7 +63,7 @@ class Finntasker_CLI:
         else:
             print(f'No username by {username} found.')
 
-    def search_investment(self, username):
+    def search_investments(self, username):
         username = username.lower()
         user = session.query(User).filter_by(username=username).first()
         if user:
