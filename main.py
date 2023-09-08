@@ -95,5 +95,18 @@ class Finntasker_CLI:
         else:
             print(f"{username} not found.")
 
+    def update_investment(self, username, description, new_amount):
+        user = session.query(User).filter_by(username=username).first()
+        if user:
+            investment = session.query(Investment).filter_by(user = user, description = description).first()
+            if investment:
+                investment.amount = new_amount
+                self.session.commit()
+                print(f"The amount for {username}'s {description} investment has been updated successfully.")
+            else:
+                print(f"No {description} investment for {username} found.")
+        else:
+            print(f"{username} not found.")
+
 if __name__ == '__main__':
     fire.Fire(Finntasker_CLI)
