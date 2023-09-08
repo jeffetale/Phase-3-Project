@@ -17,6 +17,7 @@ class Finntasker_CLI:
         print(f'User {username} added successfully.')
 
     def add_bill(self, username, description, amount, due_date):
+        username = username.lower()
         user = session.query(User).filter_by(username=username).first()
         if user:
             due_date = datetime.strptime(due_date, '%Y-%m-%d')
@@ -28,6 +29,7 @@ class Finntasker_CLI:
             print(f'No username by {username} found.')
 
     def add_investment(self, username, description, amount):
+        username = username.lower()
         user = session.query(User).filter_by(username=username).first()
         if user:
             investment = Investment(description=description, amount=amount, user=user)
@@ -37,15 +39,18 @@ class Finntasker_CLI:
         else:
             print(f'No username by {username} found.')
 
-    def search_users(self, username):
+    def search_user(self, username):
+        username = username.lower()
         user = session.query(User).filter_by(username=username).first()
         if user:
+            username = username.lower()
             print(f'User Found')
             print(f'Username: {user.username}')
         else:
             print(f'No username by {username} found.')
 
-    def search_bills(elf, username):
+    def search_bill(self, username):
+        username = username.lower()
         user = session.query(User).filter_by(username = username).first()
         if user:
             bills = user.bills
@@ -58,7 +63,8 @@ class Finntasker_CLI:
         else:
             print(f'No username by {username} found.')
 
-    def search_investments(self, username):
+    def search_investment(self, username):
+        username = username.lower()
         user = session.query(User).filter_by(username=username).first()
         if user:
             investments = user.investments
@@ -72,6 +78,7 @@ class Finntasker_CLI:
             print("No username by {username} found.")
 
     def change_password(self, username, new_password):
+        username = username.lower()
         user = session.query(User).filter_by(username=username).first()
         if user:
             user.password = new_password
@@ -81,9 +88,14 @@ class Finntasker_CLI:
             print('No username by {username} found.')
 
     def update_bill(self, username, description, new_amount, new_due_date):
+        username = username.lower()
+        print(f'Lowercased description: {description}')
         user = session.query(User).filter_by(username=username).first()
         if user:
-            bill = session.query(Bill).filter_by(user=user, description = description).first()
+            bill = session.query(Bill).filter(
+            Bill.user == user,
+            Bill.description.ilike(description)
+        ).first()
             if bill:
                 new_due_date = datetime.strptime(new_due_date, '%Y-%m-%d')
                 bill.amount = new_amount
@@ -96,9 +108,12 @@ class Finntasker_CLI:
             print(f"No username by {username} found.")
 
     def update_investment(self, username, description, new_amount):
+        username = username.lower()
         user = session.query(User).filter_by(username=username).first()
-        if user:
-            investment = session.query(Investment).filter_by(user = user, description = description).first()
+        if user:            
+            investment = session.query(Investment).filter(
+                Investment.user == user,
+                Investment.description.ilike(description)).first()
             if investment:
                 investment.amount = new_amount
                 self.session.commit()
@@ -109,6 +124,7 @@ class Finntasker_CLI:
             print(f"No username by {username} found.")
 
     def delete_user(self, username):
+        username = username.lower()
         user = session.query(User).filter_by(username=username).first()
         if user:
             self.session.query(Bill).filter_by(user= user).delete()
@@ -120,9 +136,12 @@ class Finntasker_CLI:
             print(f"No username by {username} found.")
 
     def delete_bill(self, username, description):
+        username = username.lower()
         user = session.query(User).filter_by(username = username).first()
         if user:
-            bill = session.query(Bill).filter_by(user = user, description = description).first()
+            bill = session.query(Bill).filter(
+                    Bill.user == user,
+                    Bill.description.ilike(description)).first()
             if bill:
                 self.session.delete(bill)
                 self.session.commit()
@@ -133,9 +152,12 @@ class Finntasker_CLI:
             print(f"No username by {username} found.")
 
     def delete_investment(self, username, description):
+        username = username.lower()
         user = session.query(User).filter_by(username = username).first()
         if user:
-            investment = session.query(Investment).filter_by(user = user, description = description).first()
+            investment = session.query(Investment).filter(
+                Investment.user == user,
+                Investment.description.ilike(description)).first()
             if investment:
                 self.session.delete(investment)
                 self.session.commit()
@@ -144,6 +166,6 @@ class Finntasker_CLI:
                 print(f"No {description} investment for {username} found.")
         else:
             print(f"No username by {username} found.")
-            
+
 if __name__ == '__main__':
     fire.Fire(Finntasker_CLI)
