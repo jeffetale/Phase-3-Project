@@ -10,7 +10,6 @@ class Finntasker_CLI:
     def init_db(self):
         create_db()
 
-    # In your CLI script (cli.py)
     def add_user(self, username, password):
         user = User(username= username, password= password)
         self.session.add(user)
@@ -71,6 +70,17 @@ class Finntasker_CLI:
                 print(f'No investments found for {username}.')
         else:
             print("User {username} not found.")
+
+    def change_password(self, username, new_password):
+        user = session.query(User).filter_by(username=username).first()
+        if user:
+            user.password = new_password
+            self.session.commit()
+            print(f'Password for {username} updated successfully.')
+        else:
+            print('User {username} not found.')
+
+    
 
 if __name__ == '__main__':
     fire.Fire(Finntasker_CLI)
