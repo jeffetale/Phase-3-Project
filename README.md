@@ -15,7 +15,6 @@
 
 ### Clone the Repository
 
-```bash
 git clone https://github.com/jeffetale/Phase-3-Project.git
 cd Phase-3-Project
 
