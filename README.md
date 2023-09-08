@@ -22,8 +22,8 @@ cd Phase-3-Project
 ### Dependencies
 Before running FINNTASKER, make sure you have the following dependencies installed:
 
-Python (3.10 or higher)
-Pipenv (for virtual environment)
+`Python (3.10 or higher)` or
+`Pipenv (for virtual environment)`
 To set up the virtual environment, run:
 ```bash
 pipenv install
