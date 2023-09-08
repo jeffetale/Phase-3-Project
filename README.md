@@ -91,4 +91,4 @@ Submit a pull request.
 
 ### Acknowledgements
 
-Jeff Etale - Email[jeff.etale@student.moringaschool.com]
+Jeff Etale - Email: jeff.etale@student.moringaschool.com
