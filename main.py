@@ -80,7 +80,20 @@ class Finntasker_CLI:
         else:
             print('User {username} not found.')
 
-    
+    def update_bill(self, username, description, new_amount, new_due_date):
+        user = session.query(User).filter_by(username=username).first()
+        if user:
+            bill = session.query(Bill).filter_by(user=user, description = description).first()
+            if bill:
+                new_due_date = datetime.strptime(new_due_date, '%Y-%m-%d')
+                bill.amount = new_amount
+                bill.due_date = new_due_date
+                self.session.commit()
+                print(f"{description} bill for {username} updated successfully.")
+            else:
+                print(f"{description} bill for {username} not found.")
+        else:
+            print(f"{username} not found.")
 
 if __name__ == '__main__':
     fire.Fire(Finntasker_CLI)
