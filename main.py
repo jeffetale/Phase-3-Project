@@ -16,7 +16,7 @@ class Finntasker_CLI:
         self.session.commit()
         print(f'User {username} added successfully.')
 
-    def create_bill(self, username, description, amount, due_date):
+    def add_bill(self, username, description, amount, due_date):
         user = session.query(User).filter_by(username=username).first()
         if user:
             due_date = datetime.strptime(due_date, '%Y-%m-%d')
@@ -27,13 +27,13 @@ class Finntasker_CLI:
         else:
             print(f'User {username} not found.')
 
-    def manage_investment(self, username, description, amount):
+    def add_investment(self, username, description, amount):
         user = session.query(User).filter_by(username=username).first()
         if user:
             investment = Investment(description=description, amount=amount, user=user)
             self.session.add(investment)
             self.session.commit()
-            print(f'Investment managed successfully for {username}.')
+            print(f'{description} investment added successfully for {username}.')
         else:
             print(f'User {username} not found')
 
@@ -107,6 +107,17 @@ class Finntasker_CLI:
                 print(f"No {description} investment for {username} found.")
         else:
             print(f"{username} not found.")
+
+    def delete_user(self, username):
+        user = session.query(User).filter_by(username=username).first()
+        if user:
+            self.session.query(Bill).filter_by(user= user).delete()
+            self.session.query(Investment).filter_by(user=user).delete()
+            self.session.delete(user)
+            self.session.commit()
+            print(f"{username} and all their records successfully deleted.")
+        else:
+            print(f"{username} no found.")
 
 if __name__ == '__main__':
     fire.Fire(Finntasker_CLI)
