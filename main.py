@@ -46,7 +46,7 @@ class Finntasker_CLI:
         else:
             print(f'User {username} not found.')
 
-    def search_bills(self, username):
+    def search_bills(elf, username):
         user = session.query(User).filter_by(username = username).first()
         if user:
             bills = user.bills
@@ -59,6 +59,18 @@ class Finntasker_CLI:
         else:
             print(f'User {username} not found.')
 
+    def search_investments(self, username):
+        user = session.query(User).filter_by(username=username).first()
+        if user:
+            investments = user.investments
+            if investments:
+                print(f'Investments for {username}')
+                for investment in investments:
+                    print(f'Description: {investment.description}, Amount: {investment.amount}')
+            else:
+                print(f'No investments found for {username}.')
+        else:
+            print("User {username} not found.")
 
 if __name__ == '__main__':
     fire.Fire(Finntasker_CLI)
